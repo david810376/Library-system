@@ -26,6 +26,7 @@ void outstandingrentals(vector<Book *> & myBooks);
 void cardholderentals(vector<Book *> & myBooks, vector<Person *> myCardholders);
 void opennewcard(vector<Person *> &myCardholders, int &newid);
 void closecard(vector<Person *> &myCardholders);
+void update(vector<Book *> & myBooks, vector<Person *> myCardholders);
 
 
 void printMenu() {
@@ -201,7 +202,6 @@ void bookcheckout(vector<Book *> & myBooks, vector<Person *> myCardholders)
     cout<<"Please enter the book ID: ";
     cin>>bookid;
     bookvail = checkbookid(myBooks, bookid);
-    cout<<"test: "<<bookvail<<endl;
     if(bookvail == -1)
     {
         cout<<"Book Id not found"<<endl;
@@ -300,9 +300,9 @@ void outstandingrentals(vector<Book *> & myBooks)
             cout<<"Book ID: "<<myBooks.at(i)->getId()<<endl;
             cout<<"Title: " <<myBooks.at(i)->getTitle()<<endl;
             cout<<"Author: " <<myBooks.at(i)->getAuthor()<<endl;
-            //不太懂？？
-            //是因為上面再bookcheckout有把fullname跟getid存進personPtr嗎？？
+            //mybooks read getpersonptr then read the fullname in the getpersonptr
             cout<<"Cardholder: " <<myBooks.at(i)->getPersonPtr()->fullName()<<endl;
+            //mybooks read getpersonptr then read the cardid in the getpersonptr
             cout<<"Card ID: " <<myBooks.at(i)->getPersonPtr()->getId()<<endl;
             books++;
         }
@@ -378,7 +378,42 @@ void opennewcard(vector<Person *> &myCardholders, int &newid)
 }
 void closecard(vector<Person *> &myCardholders)
 {
-    
+    int cardid,findcard;
+    char answer;
+    // when the act equal "1" is active
+    bool act=0;
+    cout<<"Please enter the card ID: ";
+    cin>>cardid;
+    findcard = finduserid(myCardholders, cardid);
+    for(int i=0;i<myCardholders.size();i++)
+    {
+        if(findcard == 0)
+        {
+            cout<<"Card ID not found"<<endl;
+            return;
+        }
+        
+    }
+    //act equal '0' is mean the card is inactive
+    //so when the act that find in when mycardholders is at findcard's id catch is it active
+    //if act equal 0 then print out
+    if(act == myCardholders.at(findcard)->isActive())
+    {
+        cout<<"Cardholder: "<<myCardholders.at(findcard)->fullName()<<endl;
+        cout<<"Card ID is already inactive"<<endl;
+    }
+    //if act find in when mycardholder is at findcard'd id and catch the active is equal 1
+    //then ask
+    else{
+        cout<<"Are you sure you want to deactivate card (y/n)? ";
+        cin>>answer;
+        if(answer =='y')
+        {
+            //setactive's act become '0'
+            myCardholders.at(findcard)->setActive(act);
+            cout<<"Card ID deactivated";
+        }
+    }
 }
 
 void update(vector<Book *> & myBooks, vector<Person *> myCardholders)
@@ -412,6 +447,7 @@ void update(vector<Book *> & myBooks, vector<Person *> myCardholders)
     }
     newfile.close();
 }
+
 /*
  You are not obligated to use these function d
 eclarations - they're just given as examples
@@ -474,15 +510,17 @@ int main()
      // Open new library card
     opennewcard(cardholders,ID);
      break;
-       /*
+     
      case 7:
      // Close library card
+             closecard(cardholders);
      break;
-     
+       
      case 8:
      // Must update records in files here before exiting the program
+             update(books,cardholders);
      break;
-     */
+     
      default:
      cout << "Invalid entry" << endl;
      break;
