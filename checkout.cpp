@@ -81,7 +81,7 @@ int readPersons(vector<Person *> & myCardholders)
     personPtr = nullptr;
     readperson.close();
     
-    return cardid;
+    return cardid+1;
 }
 
 //check book id is aviliable
@@ -129,14 +129,15 @@ int checkuserid(vector<Person *> &myCardholders, int cardId)
 //to find out the user id if aviliable then output the id's address
 int finduserid(vector<Person *> &myCardholders, int cardId)
 {
+    
     for(int i=0;i<myCardholders.size();i++)
     {
         if(cardId==myCardholders.at(i)->getId())
         {
-            return i;
+            return cardId=i;
         }
     }
-    return 0;
+    return 2;
 }
 
 void readRentals(vector<Book *> & myBooks, vector<Person *> myCardholders)
@@ -167,7 +168,7 @@ void readRentals(vector<Book *> & myBooks, vector<Person *> myCardholders)
     }
     personPtr =nullptr;
     
-    return;
+    return ;
 }
 
 
@@ -185,16 +186,16 @@ void bookcheckout(vector<Book *> & myBooks, vector<Person *> myCardholders)
     cardholder = checkuserid(myCardholders, userid);
     
     // if there is same user id then print out the name
-    if(cardholder != -1)
+    if(cardholder == -1 || myCardholders.at(cardholder)->isActive() == 0)
     {
-        //at(cardholder)--> 是因為cardholder是checkuserid時的數字
-        cout<<"Cardholder: "<<myCardholders.at(cardholder)->fullName()<<endl;
+        cout<<"Card ID not found"<<endl;
+        return ;
     }
     
     else
     {
-        cout<<"Card ID not found"<<endl;
-        exit(1);
+        //at(cardholder)--> 是因為cardholder是checkuserid時的數字
+        cout<<"Cardholder: "<<myCardholders.at(cardholder)->fullName()<<endl;
         
     }
     cin.ignore();
@@ -374,6 +375,7 @@ void opennewcard(vector<Person *> &myCardholders, int &newid)
     myCardholders.push_back(personPtr);
     cout<<"Card ID "<<newid<<" active"<<endl;
     cout<<"Card holder: "<<myCardholders.back()->fullName()<<endl;
+    personPtr =NULL;
     
 }
 void closecard(vector<Person *> &myCardholders)
@@ -387,7 +389,7 @@ void closecard(vector<Person *> &myCardholders)
     findcard = finduserid(myCardholders, cardid);
     for(int i=0;i<myCardholders.size();i++)
     {
-        if(findcard == 0)
+        if(findcard == 2)
         {
             cout<<"Card ID not found"<<endl;
             return;
