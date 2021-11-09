@@ -159,7 +159,6 @@ void readRentals(vector<Book *> & myBooks, vector<Person *> myCardholders)
     {
         bookid = vecbookid.at(i);
         userid = veccardid.at(i);
-        //下面的不懂
         books = findbookid(myBooks, bookid);
         people = finduserid(myCardholders, userid);
         personPtr = myCardholders.at(people);
@@ -224,16 +223,12 @@ void bookcheckout(vector<Book *> & myBooks, vector<Person *> myCardholders)
             if(bookid==myBooks.at(i)->getId())
             {
                 cout<<"Title: "<<myBooks.at(i)->getTitle()<<endl;
-                //下面的不懂
                 //find out this bookid and this card's userid
                 books = findbookid(myBooks, bookid);
                 users = finduserid(myCardholders, userid);
                 //write this userid in personPtr
                 //把personPtr換成myCardholders的也就是把這個換成userid的
-                //所以接下來會把userid存進去personPtr嗎
                 personPtr = myCardholders.at(users);
-                //set this book's id into setpersonPtr??嗎？？
-                //把借的人的id存進personPtr嗎
                 myBooks.at(books)->setPersonPtr(personPtr);
 
             }
